@@ -13,7 +13,25 @@ library(tidyverse)
 
 **Prompt:** Create a graphic of the posterior distribution of the [538 forecast](https://projects.fivethirtyeight.com/2020-election-forecast/) for Biden's electoral vote total. Recall the example given in Chapter 5 of *The Primer*.
 
+```{r}
+votes <- read_csv("data_538/election-forecasts-2020/presidential_ev_probabilities_2020.csv", col_types = cols(
+  cycle = col_double(),
+  branch = col_character(),
+  model = col_character(),
+  modeldate = col_character(),
+  candidate_inc = col_character(),
+  candidate_chal = col_character(),
+  candidate_3rd = col_logical(),
+  evprob_inc = col_double(),
+  evprob_chal = col_double(),
+  evprob_3rd = col_logical(),
+  total_ev = col_double(),
+  timestamp = col_character(),
+  simulations = col_double()
+))
 
+ggplot(votes, aes(total_ev, evprob_chal)) + geom_col()
+```
 
 ### Scene 2
 
@@ -41,6 +59,11 @@ c) What is the probability of a "very close" election, defined as Biden winning 
 
 d) How many unique electoral vote totals does 538 view as impossible for Biden to achieve? Some of these are truly impossible. Given an example of one of these. Why does 538 think that some vote totals, while theoretically possible, should be given zero probability in its posterior?
 
+```{r}
+votes %>% 
+  select(c(evprob_challenger, total_ev)) %>% 
+  filter(total_ev>300)
+```
 
 
 
